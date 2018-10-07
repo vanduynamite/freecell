@@ -19,6 +19,7 @@ describe Deck do
 
       expect(deduped_cards).to eq(all_card_vals)
     end
+
   end
 
   let(:cards) do
@@ -27,6 +28,10 @@ describe Deck do
       Card.new(:spades, :queen),
       Card.new(:spades, :jack)
     ]
+  end
+
+  let(:unshuffled_cards) do
+    unshuffled_cards = Deck.all_cards
   end
 
   describe "#initialize" do
@@ -39,60 +44,42 @@ describe Deck do
       deck = Deck.new(cards)
       expect(deck.count).to eq(3)
     end
-  end
 
-  let(:deck) do
-    Deck.new(cards.dup)
+    it "shuffles cards" do
+      deck = Deck.new
+      shuffled_cards = []
+      deck.count.times { |_| shuffled_cards << deck.pop }
+      expect(shuffled_cards).to_not eq(unshuffled_cards)
+    end
   end
 
   it "does not expose its cards directly" do
+    deck = Deck.new
     expect(deck).not_to respond_to(:cards)
   end
 
-  describe "#take" do
-    # **use the front of the cards array as the top**
+  describe "#pop" do
+    # **use the BACK!!! of the cards array as the top**
+
+    subject(:deck) { Deck.new }
+
     it "takes cards off the top of the deck" do
-      expect(deck.take(1)).to eq(cards[0..0])
-      expect(deck.take(2)).to eq(cards[1..2])
+      shuffled_cards = Deck.all_cards.shuffle
+      deck = Deck.new(shuffled_cards)
+      last_card = shuffled_cards[-1]
+      expect(deck.pop).to eq(last_card)
     end
 
     it "removes cards from deck on take" do
-      deck.take(2)
-      expect(deck.count).to eq(1)
+      deck.pop
+      expect(deck.count).to eq(51)
     end
 
     it "doesn't allow you to take more cards than are in the deck" do
       expect do
-        deck.take(4)
+        53.times { deck.pop }
       end.to raise_error("not enough cards")
     end
   end
 
-  describe "#return" do
-    let(:more_cards) do
-      [ Card.new(:hearts, :four),
-        Card.new(:hearts, :five),
-        Card.new(:hearts, :six) ]
-    end
-
-    it "returns cards to the deck" do
-      deck.return(more_cards)
-      expect(deck.count).to eq(6)
-    end
-
-    it "does not destroy the passed array" do
-      more_cards_dup = more_cards.dup
-      deck.return(more_cards_dup)
-      expect(more_cards_dup).to eq(more_cards)
-    end
-
-    it "adds new cards to the bottom of the deck" do
-      deck.return(more_cards)
-      deck.take(3) # toss 3 cards away
-
-      expect(deck.take(1)).to eq(more_cards[0..0])
-      expect(deck.take(1)).to eq(more_cards[1..1])
-      expect(deck.take(1)).to eq(more_cards[2..2])
-    end
-  end
 end

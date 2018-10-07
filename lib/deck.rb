@@ -13,8 +13,13 @@ class Deck
     cards
   end
 
-  def initialize(cards = Deck.all_cards)
-    @cards = cards.shuffle
+  def initialize(cards = nil)
+    if cards.nil?
+      cards = Deck.all_cards
+      @cards = cards.shuffle
+    else
+      @cards = cards
+    end
   end
 
   # Returns the number of cards in the deck.
@@ -23,6 +28,7 @@ class Deck
   end
 
   def pop
+    raise "not enough cards" if count == 0
     @cards.pop
   end
 
