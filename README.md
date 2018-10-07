@@ -5,7 +5,7 @@ Please realize that this is just my interpretation of the freecell game and its 
 
 I harvested almost all of Cards and much of Deck from the Blackjack practice assessment. The Card file was changed to account for the different values (blackjack considers face cards to be 10), and to look for the color of a card.
 
-One personal note on the rules - if you've played fancy phone versions of the game you notice you can move multiple cards from a tableau if you have the correct spots available. This is NOT implemented in my version, and IN MY OPINION (my opinion!) I don't think this will be on the assessment. If you look at Just my opinion.
+One personal note on the rules - if you've played fancy phone versions of the game you notice you can move multiple cards from a tableau if you have the correct spots available. This is NOT implemented in my version, and IN MY OPINION (my opinion!) I don't think this will be on the assessment. If you look at the email from Friday, it only mentions single cards being moved (see below). But to reiterate, this is just my opinion.
 
 All that being said, I hope you find this helpful! Good luck!
 
