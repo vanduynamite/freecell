@@ -33,10 +33,12 @@ class Tableau
   end
 
   def [](i)
+    # only used for display purposes
     stack[i]
   end
 
   def length
+    # only used for display purposes
     stack.length
   end
 
