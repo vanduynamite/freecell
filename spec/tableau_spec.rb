@@ -19,11 +19,11 @@ describe Tableau do
     before(:each) { tableau.force_push(card_black_1) }
 
     it "does not raise error if card is incorrect color" do
-      expect { tableau.force_push(card_black_2).to_not raise_error }
+      expect { tableau.force_push(card_black_2) }.to_not raise_error
     end
 
     it "does not raise error if card is incorrect value" do
-      expect { tableau.force_push(card_red_2).to_not raise_error }
+      expect { tableau.force_push(card_red_2) }.to_not raise_error
     end
   end
 
@@ -50,15 +50,6 @@ describe Tableau do
     end
     it "returns nil if the tableau is empty" do
       expect(tableau.peek).to be nil
-    end
-  end
-
-  describe "#length" do
-    it "returns the size of the tableau" do
-
-    end
-    it "returns 0 if the tableau is empty" do
-
     end
   end
 
@@ -104,17 +95,6 @@ describe Tableau do
       expect { tableau.add(card_black_3) }.to_not raise_error
       tableau.pop
       expect { tableau.add(card_red_2) }.to_not raise_error
-    end
-  end
-
-  describe "#[]" do
-    it "returns card at index" do
-      tableau.add(card_black_3)
-      tableau.add(card_red_2)
-      tableau.add(card_black_1)
-      expect(tableau[0]).to eq(card_black_3)
-      expect(tableau[1]).to eq(card_red_2)
-      expect(tableau[2]).to eq(card_black_1)
     end
   end
 

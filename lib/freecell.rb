@@ -8,6 +8,7 @@ class Freecell < Tableau
   end
 
   def to_s
+    # only for display purposes
     return "  " if empty?
     peek.to_s
   end

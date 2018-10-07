@@ -19,17 +19,17 @@ describe Player do
 
   end
 
-  describe "#take_turn" do
-    let(:game) { double("game") }
-    let(:player) { double("player") }
-    # subject(:player) { Player.new(game, "Steve Jobs") }
-    # expect(game).to receive(:map).with(deck)
-
-    it "gets a from and to pile????" do
-      # expect(hand).to receive(:return_cards).with(deck)
-      # player.return_cards(deck)
-    end
-
-  end
+  # describe "#take_turn" do
+  #   let(:game) { double("game") }
+  #   let(:player) { double("player") }
+  #   # subject(:player) { Player.new(game, "Steve Jobs") }
+  #   # expect(game).to receive(:map).with(deck)
+  #
+  #   it "gets a from and to pile????" do
+  #     # expect(hand).to receive(:return_cards).with(deck)
+  #     # player.return_cards(deck)
+  #   end
+  #
+  # end
 
 end
