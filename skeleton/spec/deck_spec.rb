@@ -61,21 +61,20 @@ describe Deck do
   describe "#pop" do
     # **use the BACK!!! of the cards array as the top**
 
-    subject(:deck) { Deck.new }
-
     it "takes cards off the top of the deck" do
-      shuffled_cards = Deck.all_cards.shuffle
-      deck = Deck.new(shuffled_cards)
-      last_card = shuffled_cards[-1]
-      expect(deck.pop).to eq(last_card)
+      card = Card.new(:spades, :ace)
+      deck = Deck.new([card])
+      expect(deck.pop).to eq(card)
     end
 
     it "removes cards from deck on take" do
+      deck = Deck.new
       deck.pop
       expect(deck.count).to eq(51)
     end
 
     it "doesn't allow you to take more cards than are in the deck" do
+      deck = Deck.new
       expect do
         53.times { deck.pop }
       end.to raise_error("not enough cards")

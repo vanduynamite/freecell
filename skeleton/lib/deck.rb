@@ -7,7 +7,7 @@ class Deck
 
   end
 
-  def initialize(cards = nil)
+  def initialize(cards = Deck.all_cards)
 
   end
 
