@@ -17,8 +17,12 @@ class Game
     @player = Player.new(self)
     @map = create_map
     populate_tableaus(deck)
-    # p foundations
   end
+
+  def won?
+    tableaus.all? { |tab| tab.empty? } && freecells.all? { |fc| fc.empty? }
+  end
+
 
   def play
     until won?
@@ -30,21 +34,19 @@ class Game
   end
 
   def render
+    # for display only
     display.render
   end
 
   def tableau_lengths
+    # for display only
     tableaus.map { |tab| tab.length }
-  end
-
-  def won?
-    tableaus.all? { |tab| tab.empty? } && freecells.all? { |fc| fc.empty? }
   end
 
   private
 
   def populate_tableaus(deck)
-    deck.count.times { |i| @tableaus[i % 8].force_push(deck.pop) }
+    deck.count.times { |i| @tableaus[i % tableaus.count].force_push(deck.pop) }
   end
 
   def create_map
@@ -70,5 +72,7 @@ class Game
 
 end
 
-g = Game.new
-g.play
+if __FILE__ == $0
+  g = Game.new
+  g.play
+end
