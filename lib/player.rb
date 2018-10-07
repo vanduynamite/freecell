@@ -5,8 +5,7 @@ class Player
   attr_reader :game, :name
 
   def initialize(game, name = "Bill Gates")
-    @game = game
-    @name = name
+
   end
 
   def take_turn

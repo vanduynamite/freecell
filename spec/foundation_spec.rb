@@ -7,6 +7,7 @@ describe Foundation do
   let(:card_red_1) { Card.new(:hearts, :ace) }
   let(:card_black_1) { Card.new(:spades, :ace) }
   let(:card_red_2) { Card.new(:hearts, :deuce) }
+  let(:card_black_2) { Card.new(:spades, :deuce) }
   let(:card_red_3) { Card.new(:hearts, :three) }
 
   describe '#initialize' do
@@ -19,6 +20,8 @@ describe Foundation do
 
     it "raises error if the suit is incorrect" do
       expect { foundation.add(card_black_1) }.to raise_error "wrong suit"
+      foundation.add(card_red_1)
+      expect { foundation.add(card_black_2) }.to raise_error "wrong suit"
     end
 
     it "raises error if the first card is not an ace" do

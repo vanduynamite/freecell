@@ -3,9 +3,9 @@
 ## A note from the author
 Please realize that this is just my interpretation of the freecell game and its solution. DO NOT assume in any way that this solution will be similar or even close to the assessment. This was helpful for me to internalize the rules of the game and to try my hand at writing some specs. I am still learning rspec and therefore I think my specs are pretty simple. Very few doubles or other complicated situations.
 
-I harvested almost all of Cards and much of Deck from the Blackjack practice assessment.
+I harvested almost all of Cards and much of Deck from the Blackjack practice assessment. The Card file was changed to account for the different values (blackjack considers face cards to be 10), and to look for the color of a card.
 
-One personal note on the rules - if you've played fancy phone versions of the game you notice you can move multiple cards from a tableau if you have the correct spots available. This is NOT implemented in the version, and IN MY OPINION (my opinion!) I don't think this will be on the assessment.
+One personal note on the rules - if you've played fancy phone versions of the game you notice you can move multiple cards from a tableau if you have the correct spots available. This is NOT implemented in my version, and IN MY OPINION (my opinion!) I don't think this will be on the assessment. If you look at Just my opinion.
 
 All that being said, I hope you find this helpful! Good luck!
 

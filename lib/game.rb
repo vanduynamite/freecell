@@ -10,19 +10,19 @@ class Game
   attr_reader :display, :freecells, :foundations, :tableaus, :map, :player
 
   def initialize(deck = Deck.new)
-    @tableaus = Array.new(8) { Tableau.new }
-    @freecells = Array.new(4) { Freecell.new }
-    @foundations = Card.suits.map { |suit| Foundation.new(suit) }
+
+
     @display = Display.new(self)
     @player = Player.new(self)
-    @map = create_map
-    populate_tableaus(deck)
+
+    # uncomment this when everything else is complete
+    # this map is how user input is translated into the correct pile
+    # @map = create_map
   end
 
   def won?
-    tableaus.all? { |tab| tab.empty? } && freecells.all? { |fc| fc.empty? }
-  end
 
+  end
 
   def play
     until won?
@@ -46,9 +46,10 @@ class Game
   private
 
   def populate_tableaus(deck)
-    deck.count.times { |i| @tableaus[i % tableaus.count].force_push(deck.pop) }
+
   end
 
+  # this map is how user input is translated into the correct pile
   def create_map
     {
       48 => @tableaus[0],
