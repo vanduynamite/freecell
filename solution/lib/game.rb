@@ -46,7 +46,7 @@ class Game
   private
 
   def populate_tableaus(deck)
-    deck.count.times { |i| @tableaus[i % tableaus.count].force_push(deck.pop) }
+    deck.count.times { |i| @tableaus[i % tableaus.count].add!(deck.pop) }
   end
 
   def create_map

@@ -9,16 +9,13 @@ class Foundation < Tableau
     super()
   end
 
-  def add(card)
-
-    unless card.value == :ace
-      raise "first card must be ace" if empty?
-      raise "wrong number" unless card.freecell_value == peek.freecell_value + 1
-    end
-    
+  def valid_add?(card)
     raise "wrong suit" unless card.suit == suit
+    return true if empty? && card.value == :ace
+    raise "first card must be ace" if empty? && card.value != :ace
+    raise "wrong number" unless card.freecell_value == peek.freecell_value + 1
 
-    stack << card
+    true
   end
 
   def to_s

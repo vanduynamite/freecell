@@ -15,15 +15,15 @@ describe Tableau do
     expect(tableau).not_to respond_to(:stack)
   end
 
-  describe "#force_push" do
-    before(:each) { tableau.force_push(card_black_1) }
+  describe "#add!" do
+    before(:each) { tableau.add!(card_black_1) }
 
     it "does not raise error if card is incorrect color" do
-      expect { tableau.force_push(card_black_2) }.to_not raise_error
+      expect { tableau.add!(card_black_2) }.to_not raise_error
     end
 
     it "does not raise error if card is incorrect value" do
-      expect { tableau.force_push(card_red_2) }.to_not raise_error
+      expect { tableau.add!(card_red_2) }.to_not raise_error
     end
   end
 
@@ -32,7 +32,7 @@ describe Tableau do
       expect(tableau.empty?).to be true
     end
     it "returns false when the tableau is not empty" do
-      tableau.force_push(card_black_1)
+      tableau.add!(card_black_1)
       expect(tableau.empty?).to be false
     end
   end
@@ -45,7 +45,7 @@ describe Tableau do
 
   describe "#peek" do
     it "shows the last card on the tableau" do
-      tableau.force_push(card_black_1)
+      tableau.add!(card_black_1)
       expect(tableau.peek).to eq(card_black_1)
     end
     it "returns nil if the tableau is empty" do
@@ -55,14 +55,14 @@ describe Tableau do
 
   describe "#pop" do
 
-    before(:each) { tableau.force_push(card_red_2) }
+    before(:each) { tableau.add!(card_red_2) }
 
     it "returns the last card on the tableau" do
       expect(tableau.pop).to eq(card_red_2)
     end
 
     it "removes the last card from the tableau" do
-      tableau.force_push(card_black_1)
+      tableau.add!(card_black_1)
       tableau.pop
       expect(tableau.length).to eq(1)
     end
@@ -73,7 +73,7 @@ describe Tableau do
   end
 
   describe "#add" do
-    before(:each) { tableau.force_push(card_red_3) }
+    before(:each) { tableau.add!(card_red_3) }
 
     it "does not raise an error adding cards with the correct color and value" do
       expect { tableau.add(card_black_2) }.to_not raise_error

@@ -1,3 +1,4 @@
+require "byebug"
 require_relative 'deck'
 
 class Tableau
@@ -20,25 +21,25 @@ class Tableau
   end
 
   def add(card)
-    unless empty?
-      raise "value is wrong" unless card.freecell_value + 1 == peek.freecell_value
-      raise "color is wrong" if card.color == peek.color
-    end
+    add!(card) if valid_add?(card)
+  end
 
+  def add!(card)
     stack << card
   end
 
-  def force_push(card)
-    stack << card
+  def valid_add?(card)
+    return true if empty?
+    raise "color is wrong" if card.color == peek.color
+    raise "value is wrong" unless card.freecell_value + 1 == peek.freecell_value
+    return true
   end
 
   def [](i)
-    # only used for display purposes
     stack[i]
   end
 
   def length
-    # only used for display purposes
     stack.length
   end
 

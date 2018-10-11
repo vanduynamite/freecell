@@ -47,13 +47,13 @@ describe Game do
     end
 
     it "returns false if there are still cards in the freecells" do
-      4.times { |i| game.foundations[i].force_push(game.tableaus[i].pop) }
-      4.times { |i| game.freecells[i].force_push(game.tableaus[i + 4].pop) }
+      4.times { |i| game.foundations[i].add!(game.tableaus[i].pop) }
+      4.times { |i| game.freecells[i].add!(game.tableaus[i + 4].pop) }
       expect(game.won?).to be false
     end
 
     it "returns true if no cards in freecells or tableau" do
-      4.times { |i| game.foundations[i].force_push(game.freecells[i].pop) }
+      4.times { |i| game.foundations[i].add!(game.freecells[i].pop) }
       expect(game.won?).to be true
     end
 

@@ -15,7 +15,7 @@ class Player
       card = from_pile.pop
       to_pile.add(card)
     rescue => e
-      from_pile.force_push(card)
+      from_pile.add!(card)
       puts e.message
       retry
     end

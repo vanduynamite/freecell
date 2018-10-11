@@ -2,9 +2,9 @@ require_relative "tableau"
 
 class Freecell < Tableau
 
-  def add(card)
+  def valid_add?(card)
     raise "freecell is not empty" unless empty?
-    stack << card
+    true
   end
 
   def to_s

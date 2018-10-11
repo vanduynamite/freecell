@@ -22,7 +22,7 @@ class Tableau
 
   end
 
-  def force_push(card)
+  def add!(card)
 
   end
 

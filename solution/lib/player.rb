@@ -13,10 +13,9 @@ class Player
     begin
       from_pile = game.map[get_from_pile.ord]
       to_pile = game.map[get_to_pile.ord]
-      card = from_pile.pop
-      to_pile.add(card)
+      to_pile.valid_add?(from_pile.peek)
+      to_pile.add!(from_pile.pop)
     rescue => e
-      from_pile.force_push(card)
       puts e.message
       retry
     end
