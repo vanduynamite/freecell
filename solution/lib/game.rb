@@ -19,36 +19,44 @@ class Game
     tableaus.all? { |tab| tab.empty? } && freecells.all? { |fc| fc.empty? }
   end
 
-
-  def play
-    render
-    puts "Ready???\n"
-    sleep(1)
-    puts "Set???????\n"
-    sleep(1)
-    puts "GO!!!!!!!!"
-    sleep(1)
+  def play_ai
+    start_message
     gs = GameState.new(nil,
       tableaus: tableaus,
       freecells: freecells,
       foundations: foundations,
       prev_game_states: Hash.new(false))
     gs.generate_children
-    # until attr_writer :attr_nameson?
-    #   render
-    #   player.take_turn
-    # end
-    #
-    # puts "\n\n\nCRAZY CARD ANIMATION!!!\n\n\n"
+  end
+
+  def play_human
+    until won?
+      render
+      player.take_turn
+    end
+  end
+
+  def start_message
+    render
+    puts "Ready???\n\n"
+    sleep(1.5)
+    puts "Set???????\n\n"
+    sleep(1.5)
+    puts "GO!!!!!!!!"
+    sleep(1.5)
+  end
+
+  def winning_message
+    render
+    puts "\n\nIT WORKED!!!!!!!!\n\n\n"
+    exit
   end
 
   def render
-    # for display only
     display.render
   end
 
   def tableau_lengths
-    # for display only
     tableaus.map { |tab| tab.length }
   end
 
@@ -83,5 +91,5 @@ end
 
 if __FILE__ == $0
   g = Game.new
-  g.play
+  g.play_ai
 end

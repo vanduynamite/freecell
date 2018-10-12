@@ -8,7 +8,7 @@ class Card
     :clubs    => "♣",
     :diamonds => "♦",
     :hearts   => "♥",
-    :spades   => "♠"
+    :spades   => "♠",
   }
 
   SUIT_COLORS = {
@@ -27,7 +27,7 @@ class Card
     :six   => "6",
     :seven => "7",
     :eight => "8",
-    # :nine  => "9",
+    :nine  => "9",
     # :ten   => "T",
     # :jack  => "J",
     # :queen => "Q",
