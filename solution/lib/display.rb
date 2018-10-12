@@ -7,6 +7,7 @@ class Display
   end
 
   def render
+    # sleep(0.2)
     system("clear")
     render_top
     render_tableaus
@@ -38,9 +39,15 @@ class Display
   def render_top
     puts TOP_CARD_LETTERS, TOP_CARD_LINE, TOP_CARD_SIDES
     line = "|  "
-    game.freecells.each_with_index do |freecell, i|
-      line += freecell.to_s + "  | "
-      line += "|  " if i < game.freecells.length - 1
+    (0...4).each do |i|
+      if i < game.freecells.length
+        freecell = game.freecells[i]
+        line += freecell.to_s + "  | "
+      else
+        line += "    | "
+      end
+
+      line += "|  " if i < 3
     end
     line += "       |  "
     game.foundations.each_with_index do |foundation, i|

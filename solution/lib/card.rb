@@ -27,11 +27,11 @@ class Card
     :six   => "6",
     :seven => "7",
     :eight => "8",
-    :nine  => "9",
-    :ten   => "T",
-    :jack  => "J",
-    :queen => "Q",
-    :king  => "K",
+    # :nine  => "9",
+    # :ten   => "T",
+    # :jack  => "J",
+    # :queen => "Q",
+    # :king  => "K",
   }
 
   FREECELL_VALUE = {
@@ -81,5 +81,5 @@ class Card
   def to_s
     VALUE_STRINGS[value] + SUIT_STRINGS[suit].colorize(color)
   end
-  
+
 end

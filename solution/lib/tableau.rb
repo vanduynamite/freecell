@@ -3,8 +3,8 @@ require_relative 'deck'
 
 class Tableau
 
-  def initialize
-    @stack = []
+  def initialize(stack = [])
+    @stack = stack
   end
 
   def pop
@@ -30,8 +30,10 @@ class Tableau
 
   def valid_add?(card)
     return true if empty?
-    raise "color is wrong" if card.color == peek.color
-    raise "value is wrong" unless card.freecell_value + 1 == peek.freecell_value
+    # raise "color is wrong" if card.color == peek.color
+    # raise "value is wrong" unless card.freecell_value + 1 == peek.freecell_value
+    return false if card.color == peek.color
+    return false unless card.freecell_value + 1 == peek.freecell_value
     return true
   end
 
@@ -43,7 +45,10 @@ class Tableau
     stack.length
   end
 
-  private
+  def deep_dup
+    Tableau.new(stack.dup)
+  end
+
   attr_accessor :stack
 
 end

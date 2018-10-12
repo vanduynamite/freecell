@@ -4,18 +4,30 @@ class Foundation < Tableau
 
   attr_reader :suit
 
-  def initialize(suit)
+  def initialize(suit, stack = [])
     @suit = suit
-    super()
+    super(stack)
   end
 
   def valid_add?(card)
-    raise "wrong suit" unless card.suit == suit
+    # raise "wrong suit" unless card.suit == suit
+    # return true if empty? && card.value == :ace
+    # raise "first card must be ace" if empty? && card.value != :ace
+    # raise "wrong number" unless card.freecell_value == peek.freecell_value + 1
+    return false unless card.suit == suit
     return true if empty? && card.value == :ace
-    raise "first card must be ace" if empty? && card.value != :ace
-    raise "wrong number" unless card.freecell_value == peek.freecell_value + 1
+    return false if empty? && card.value != :ace
+    return false unless card.freecell_value == peek.freecell_value + 1
 
     true
+  end
+
+  def deep_dup
+    Foundation.new(suit, stack.dup)
+  end
+
+  def add!(card)
+    stack << card
   end
 
   def to_s

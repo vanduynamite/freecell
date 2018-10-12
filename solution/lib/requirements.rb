@@ -1,0 +1,11 @@
+
+require_relative "game"
+require_relative "game_state"
+require_relative "deck"
+require_relative "tableau"
+require_relative "freecell"
+require_relative "foundation"
+require_relative "display"
+require_relative "player"
+require_relative "ai"
+require "byebug"

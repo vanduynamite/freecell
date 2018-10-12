@@ -1,20 +1,16 @@
-require_relative "deck"
-require_relative "tableau"
-require_relative "freecell"
-require_relative "foundation"
-require_relative "display"
-require_relative "player"
+require_relative "requirements"
 
 class Game
 
-  attr_reader :display, :freecells, :foundations, :tableaus, :map, :player
+  attr_reader :display, :freecells, :foundations, :tableaus, :map, :player, :reverse_map
 
   def initialize(deck = Deck.new)
     @tableaus = Array.new(8) { Tableau.new }
     @freecells = Array.new(4) { Freecell.new }
     @foundations = Card.suits.map { |suit| Foundation.new(suit) }
     @display = Display.new(self)
-    @player = Player.new(self)
+    # @player = Player.new(self)
+    @player = AIPlayer.new(self)
     @map = create_map
     populate_tableaus(deck)
   end
@@ -25,12 +21,25 @@ class Game
 
 
   def play
-    until won?
-      render
-      player.take_turn
-    end
-
-    puts "\n\n\nCRAZY CARD ANIMATION!!!\n\n\n"
+    render
+    puts "Ready???\n"
+    sleep(1)
+    puts "Set???????\n"
+    sleep(1)
+    puts "GO!!!!!!!!"
+    sleep(1)
+    gs = GameState.new(nil,
+      tableaus: tableaus,
+      freecells: freecells,
+      foundations: foundations,
+      prev_game_states: Hash.new(false))
+    gs.generate_children
+    # until attr_writer :attr_nameson?
+    #   render
+    #   player.take_turn
+    # end
+    #
+    # puts "\n\n\nCRAZY CARD ANIMATION!!!\n\n\n"
   end
 
   def render
