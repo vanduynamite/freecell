@@ -1,8 +1,7 @@
 require_relative 'card'
 
-# Represents a deck of playing cards.
 class Deck
-  # Returns an array of all 52 playing cards.
+
   def self.all_cards
     cards = []
     Card.suits.each do |suit|
@@ -17,7 +16,6 @@ class Deck
     @cards = cards.shuffle
   end
 
-  # Returns the number of cards in the deck.
   def count
     @cards.count
   end

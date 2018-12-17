@@ -1,8 +1,5 @@
 require "colorize"
 
-# -*- coding: utf-8 -*-
-
-# Represents a playing card.
 class Card
   SUIT_STRINGS = {
     :clubs    => "♣",
@@ -50,12 +47,10 @@ class Card
     king: 13,
   }
 
-  # Returns an array of all suits.
   def self.suits
     SUIT_STRINGS.keys
   end
 
-  # Returns an array of all values.
   def self.values
     VALUE_STRINGS.keys
   end
