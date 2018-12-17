@@ -1,13 +1,13 @@
 require_relative "requirements"
 
-class GameState < Game
-  attr_reader :freecells, :foundations, :tableaus, :losing, :children
+class GameNode < Game
+  attr_reader :freecells, :foundations, :tableaus, :children, :display
   attr_reader :prev_game_states, :reverse_map, :from_key, :to_key
 
   def initialize(parent, options)
-    @parent = parent # parent node of GameState type
+    @parent = parent
     @children = []
-    @display = Display.new(self)
+    @display = parent.display || Display.new(self)
 
     @from_key = options[:from_key]
     @to_key = options[:to_key]
@@ -15,7 +15,7 @@ class GameState < Game
     @tableaus = options[:tableaus]
     @freecells = options[:freecells]
     @foundations = options[:foundations]
-    @reverse_map = build_reverse_map
+    @reverse_map = parent ? parent.reverse_map : build_reverse_map
 
     @prev_game_states = options[:prev_game_states]
   end
@@ -25,15 +25,15 @@ class GameState < Game
 
     get_possible_moves.each do |from_pile, to_pile|
       to_pile.add!(from_pile.pop)
-      winning_message if won?
+      end_game if won?
       add_new_game_state(from_pile, to_pile) unless prev_game_states[compress]
       from_pile.add!(to_pile.pop)
     end
 
-    # children.last.generate_children # for breadth first?
+    # use this for a breadth first search
+    # instead of children.last.generate_children in add_new_game_state
+    # children.last.generate_children
 
-    # puts "\n\nResetting loop, we didn't seem to get anywhere going down that rabbit hole...\n\n"
-    # sleep(0.3)
   end
 
   def add_new_game_state(from_pile, to_pile)
@@ -41,7 +41,8 @@ class GameState < Game
     new_to_key = reverse_map[to_pile].chr
     puts "Possible move from #{new_from_key} to #{new_to_key}"
     self.prev_game_states[compress] = true
-    children << GameState.new(self,
+
+    children << GameNode.new(self,
       tableaus: tableaus_dup,
       freecells: freecells_dup,
       foundations: foundations_dup,
@@ -49,7 +50,8 @@ class GameState < Game
       to_key: new_to_key,
       prev_game_states: prev_game_states)
 
-    children.last.generate_children
+    # use this for depth first search
+    # children.last.generate_children
   end
 
   def compress
@@ -73,7 +75,6 @@ class GameState < Game
   end
 
   def get_possible_moves
-    # returns an array of arrays. each index represents a to_pile, from_pile row
     results = []
 
     foundations.each { |foundation| results += possible_moves_to_foundation(foundation) }
@@ -83,18 +84,22 @@ class GameState < Game
     results
   end
 
+  def possible_move?(pile, card)
+    begin
+      pile.valid_add?(card)
+      return true
+    rescue => e
+      puts e.message
+      return false
+    end
+  end
+
   def possible_moves_to_foundation(foundation)
     results = []
 
-    freecells.each do |freecell|
-      unless freecell.empty?
-        results << [freecell, foundation] if foundation.valid_add?(freecell.peek)
-      end
-    end
-
-    tableaus.each do |tableau|
-      unless tableau.empty?
-        results << [tableau, foundation] if foundation.valid_add?(tableau.peek)
+    freecells.concat(tableaus).each do |pile|
+      unless pile.empty?
+        results << [pile, foundation] if possible_move?(foundation, pile.peek)
       end
     end
 
@@ -107,8 +112,8 @@ class GameState < Game
     top = tableau.peek
 
     tableaus.each do |tableau2|
-      if tableau2.valid_add?(top) && (!tableau2.empty? || tableau.length > 1)
-        results << [tableau, tableau2]
+      if (!tableau2.empty? || tableau.length > 1)
+        results << [tableau, tableau2] if possible_move?(tableau2, top)
       end
     end
 
@@ -122,8 +127,7 @@ class GameState < Game
 
     results = []
     top = freecell.peek
-
-    tableaus.each { |tableau| results << [freecell, tableau] if tableau.valid_add?(top) }
+    tableaus.each { |tab| results << [freecell, tab] if possible_move?(tab, top) }
 
     results
   end

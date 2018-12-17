@@ -73,6 +73,6 @@ class Game
 end
 
 if __FILE__ == $0
-  g = Game.new(true)
+  g = Game.new(false)
   g.play
 end

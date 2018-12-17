@@ -1,6 +1,6 @@
 
 require_relative "game"
-require_relative "game_state"
+require_relative "game_node"
 require_relative "deck"
 require_relative "tableau"
 require_relative "freecell"

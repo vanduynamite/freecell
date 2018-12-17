@@ -4,7 +4,6 @@ class Freecell < Tableau
 
   def valid_add?(card)
     raise "freecell is not empty" unless empty?
-    # return false unless empty?
     true
   end
 

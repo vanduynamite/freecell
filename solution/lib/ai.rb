@@ -2,30 +2,33 @@ require_relative "requirements"
 
 class AIPlayer < Player
 
+  attr_reader :start_node
+
   def initialize(game)
     super(game, "Hal")
+
+    @start_node = GameNode.new(nil,
+      tableaus: game.tableaus,
+      freecells: game.freecells,
+      foundations: game.foundations,
+      prev_game_states: Hash.new(false))
   end
 
   def take_turn
 
-    # gs = GameState.new(nil,
-    #   tableaus: tableaus,
-    #   freecells: freecells,
-    #   foundations: foundations,
-    #   prev_game_states: Hash.new(false))
-    # gs.generate_children
+    start_node.generate_children
+    byebug
 
 
-
-    begin
-      from_pile = game.map[get_from_pile.ord]
-      to_pile = game.map[get_to_pile.ord]
-      to_pile.valid_add?(from_pile.peek)
-      to_pile.add!(from_pile.pop)
-    rescue => e
-      puts e.message
-      retry
-    end
+    # begin
+    #   from_pile = game.map[get_from_pile.ord]
+    #   to_pile = game.map[get_to_pile.ord]
+    #   to_pile.valid_add?(from_pile.peek)
+    #   to_pile.add!(from_pile.pop)
+    # rescue => e
+    #   puts e.message
+    #   retry
+    # end
   end
 
   private
