@@ -12,23 +12,16 @@ class AIPlayer < Player
       freecells: game.freecells,
       foundations: game.foundations,
       prev_game_states: Hash.new(false))
+
+    @nodes = [start_node]
   end
 
   def take_turn
+    generate_node_graph
+  end
 
+  def generate_node_graph
     start_node.generate_children
-    byebug
-
-
-    # begin
-    #   from_pile = game.map[get_from_pile.ord]
-    #   to_pile = game.map[get_to_pile.ord]
-    #   to_pile.valid_add?(from_pile.peek)
-    #   to_pile.add!(from_pile.pop)
-    # rescue => e
-    #   puts e.message
-    #   retry
-    # end
   end
 
   private

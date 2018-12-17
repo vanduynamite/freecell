@@ -2,21 +2,18 @@ require_relative "requirements"
 
 class GameNode < Game
   attr_reader :freecells, :foundations, :tableaus, :children, :display
-  attr_reader :prev_game_states, :reverse_map, :from_key, :to_key
+  attr_reader :prev_game_states, :reverse_map
 
   def initialize(parent, options)
     @parent = parent
     @children = []
-    @display = parent.display || Display.new(self)
-
-    @from_key = options[:from_key]
-    @to_key = options[:to_key]
 
     @tableaus = options[:tableaus]
     @freecells = options[:freecells]
     @foundations = options[:foundations]
-    @reverse_map = parent ? parent.reverse_map : build_reverse_map
 
+    @display = Display.new(self)
+    @reverse_map = build_reverse_map
     @prev_game_states = options[:prev_game_states]
   end
 
@@ -30,9 +27,7 @@ class GameNode < Game
       from_pile.add!(to_pile.pop)
     end
 
-    # use this for a breadth first search
-    # instead of children.last.generate_children in add_new_game_state
-    # children.last.generate_children
+    # children.last.generate_children # breadth first solve
 
   end
 
@@ -46,12 +41,9 @@ class GameNode < Game
       tableaus: tableaus_dup,
       freecells: freecells_dup,
       foundations: foundations_dup,
-      from_key: new_from_key,
-      to_key: new_to_key,
       prev_game_states: prev_game_states)
 
-    # use this for depth first search
-    # children.last.generate_children
+    children.last.generate_children # depth first solve
   end
 
   def compress
@@ -89,15 +81,15 @@ class GameNode < Game
       pile.valid_add?(card)
       return true
     rescue => e
-      puts e.message
+      # puts e.message
       return false
     end
   end
 
   def possible_moves_to_foundation(foundation)
     results = []
-
-    freecells.concat(tableaus).each do |pile|
+    piles = freecells + tableaus
+    piles.each do |pile|
       unless pile.empty?
         results << [pile, foundation] if possible_move?(foundation, pile.peek)
       end
@@ -127,7 +119,9 @@ class GameNode < Game
 
     results = []
     top = freecell.peek
-    tableaus.each { |tab| results << [freecell, tab] if possible_move?(tab, top) }
+    tableaus.each do |tableau|
+      results << [freecell, tableau] if possible_move?(tableau, top)
+    end
 
     results
   end

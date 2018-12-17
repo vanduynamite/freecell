@@ -21,10 +21,6 @@ class Foundation < Tableau
     Foundation.new(suit, stack.dup)
   end
 
-  def add!(card)
-    stack << card
-  end
-
   def to_s
     # only for display purposes
     return "  " if empty?
