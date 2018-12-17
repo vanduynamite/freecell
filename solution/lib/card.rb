@@ -9,10 +9,10 @@ class Card
   }
 
   SUIT_COLORS = {
-    :clubs    => :black,
+    :clubs    => :white,
     :diamonds => :red,
     :hearts   => :red,
-    :spades   => :black,
+    :spades   => :white,
   }
 
   VALUE_STRINGS = {

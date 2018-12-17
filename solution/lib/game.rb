@@ -4,13 +4,13 @@ class Game
 
   attr_reader :display, :freecells, :foundations, :tableaus, :map, :player, :reverse_map
 
-  def initialize(deck = Deck.new)
+  def initialize(human_player = false, deck = Deck.new)
     @tableaus = Array.new(8) { Tableau.new }
     @freecells = Array.new(4) { Freecell.new }
     @foundations = Card.suits.map { |suit| Foundation.new(suit) }
     @display = Display.new(self)
-    # @player = Player.new(self)
-    @player = AIPlayer.new(self)
+    @human_player = human_player
+    @player = human_player ? Player.new(self) : @player = AIPlayer.new(self)
     @map = create_map
     populate_tableaus(deck)
   end
@@ -19,36 +19,19 @@ class Game
     tableaus.all? { |tab| tab.empty? } && freecells.all? { |fc| fc.empty? }
   end
 
-  def play_ai
-    start_message
-    gs = GameState.new(nil,
-      tableaus: tableaus,
-      freecells: freecells,
-      foundations: foundations,
-      prev_game_states: Hash.new(false))
-    gs.generate_children
-  end
-
-  def play_human
+  def play
     until won?
       render
       player.take_turn
     end
+
+    end_game
   end
 
-  def start_message
+  def end_game
     render
-    puts "Ready???\n\n"
-    sleep(1.5)
-    puts "Set???????\n\n"
-    sleep(1.5)
-    puts "GO!!!!!!!!"
-    sleep(1.5)
-  end
-
-  def winning_message
-    render
-    puts "\n\nIT WORKED!!!!!!!!\n\n\n"
+    puts "\n\nYou won!!\n\n\n"
+    # execute the shortest set of steps if AI
     exit
   end
 
@@ -90,6 +73,6 @@ class Game
 end
 
 if __FILE__ == $0
-  g = Game.new
-  g.play_ai
+  g = Game.new(true)
+  g.play
 end

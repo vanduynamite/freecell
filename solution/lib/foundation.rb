@@ -10,14 +10,15 @@ class Foundation < Tableau
   end
 
   def valid_add?(card)
-    # raise "wrong suit" unless card.suit == suit
-    # return true if empty? && card.value == :ace
-    # raise "first card must be ace" if empty? && card.value != :ace
-    # raise "wrong number" unless card.freecell_value == peek.freecell_value + 1
-    return false unless card.suit == suit
+    raise "wrong suit" unless card.suit == suit
     return true if empty? && card.value == :ace
-    return false if empty? && card.value != :ace
-    return false unless card.freecell_value == peek.freecell_value + 1
+    raise "first card must be ace" if empty? && card.value != :ace
+    raise "wrong number" unless card.freecell_value == peek.freecell_value + 1
+
+    # return false unless card.suit == suit
+    # return true if empty? && card.value == :ace
+    # return false if empty? && card.value != :ace
+    # return false unless card.freecell_value == peek.freecell_value + 1
 
     true
   end
