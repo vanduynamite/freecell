@@ -25,8 +25,9 @@ class GameNode < Game
       if all_nodes[compressed] == 0
         add_new_game_state(from_pile, to_pile)
       elsif all_nodes[compressed] > distance_from_root
-        byebug
-        all_nodes[compressed].distance_from_root = distance_from_root
+        # byebug
+        # all_nodes[compressed].distance_from_root = distance_from_root
+        # ideally something in here about shortening the path to victory
       end
       from_pile.add!(to_pile.pop)
     end
@@ -45,14 +46,14 @@ class GameNode < Game
   end
 
   def compress_node
-    # results = {
-    #   tableaus: Hash.new,
-    #   freecells: Hash.new,
-    #   foundations: Hash.new,
-    # }
-    # tableaus.each { |t| results[:tableaus][t.stack] = true }
-    # freecells.each { |f| results[:freecells][f.stack] = true }
-    # foundations.each { |f| results[:foundations][f.stack] = true }
+    results = {
+      tableaus: Hash.new,
+      freecells: Hash.new,
+      foundations: Hash.new,
+    }
+    tableaus.each { |t| results[:tableaus][t.stack] = true }
+    freecells.each { |f| results[:freecells][f.stack] = true }
+    foundations.each { |f| results[:foundations][f.stack] = true }
     # return results
 
     results = []

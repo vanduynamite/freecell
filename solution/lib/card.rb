@@ -4,8 +4,8 @@ class Card
   SUIT_STRINGS = {
     :clubs    => "♣",
     :diamonds => "♦",
-    :hearts   => "♥",
-    :spades   => "♠",
+    # :hearts   => "♥",
+    # :spades   => "♠",
   }
 
   SUIT_COLORS = {

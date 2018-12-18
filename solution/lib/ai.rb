@@ -27,6 +27,7 @@ class AIPlayer < Player
     game.freecells = node.freecells
     game.foundations = node.foundations
     node.generate_children
+    # byebug
     nodes_to_visit.concat(node.children)
   end
 
