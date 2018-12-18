@@ -18,13 +18,14 @@ class Player
       to_pile = game.map[get_to_pile.ord]
       to_pile.valid_add?(from_pile.peek)
       to_pile.add!(from_pile.pop)
+      self.nodes_visited = nodes_visited + 1
     rescue => e
       puts e.message
       retry
     end
   end
 
-  def end_game
+  def end_game(print_nodes)
     end_time = Time.now()
     puts "Took #{end_time - start_time} seconds"
     puts "Visited #{nodes_visited} nodes"

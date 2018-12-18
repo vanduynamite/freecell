@@ -9,11 +9,13 @@ class Game
     @tableaus = Array.new(8) { Tableau.new }
     @freecells = Array.new(4) { Freecell.new }
     @foundations = Card.suits.map { |suit| Foundation.new(suit) }
+    populate_tableaus(deck)
+
     @display = Display.new(self)
+    @map = create_map
+
     @human_player = human_player
     @player = human_player ? Player.new(self) : @player = AIPlayer.new(self)
-    @map = create_map
-    populate_tableaus(deck)
   end
 
   def won?
@@ -21,7 +23,9 @@ class Game
   end
 
   def play
+    render
     until won?
+      # byebug
       render
       player.take_turn
     end

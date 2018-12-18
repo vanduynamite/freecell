@@ -3,7 +3,7 @@ require_relative "requirements"
 class GameNode < Game
 
   attr_accessor :distance_from_root
-  attr_reader :graph, :children, :compressed
+  attr_reader :graph, :children, :compressed, :score
 
   def initialize(parent, options)
     @parent = parent
@@ -15,6 +15,7 @@ class GameNode < Game
     @foundations = options[:foundations]
 
     @compressed = compress_node
+    @score = score_node
 
     @graph = options[:graph]
     update_graph
@@ -147,6 +148,16 @@ class GameNode < Game
 
   def empty_freecell
     freecells.select { |freecell| freecell.empty? }.first
+  end
+
+  def score_node
+    score = 0
+
+    # foundations.each { |f| score += 0 } # anything on a foundation costs 0
+    freecells.each { |f| score += f.score }
+    tableaus.each { |t| score += t.score }
+    # puts score
+    score
   end
 
   # def build_reverse_map

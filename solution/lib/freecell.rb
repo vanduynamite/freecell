@@ -22,4 +22,10 @@ class Freecell < Tableau
     peek.to_s
   end
 
+  def score
+    return 0 if empty?
+    max = 10
+    10 * (max + 1 - stack[0].freecell_value)
+  end
+
 end

@@ -3,6 +3,8 @@ require_relative 'deck'
 
 class Tableau
 
+  attr_accessor :stack
+
   def initialize(stack = [])
     @stack = stack
   end
@@ -35,6 +37,13 @@ class Tableau
     return true
   end
 
+  def index_in_order?(i)
+    return true if i == 0
+    return false if stack[i].color == stack[i - 1].color
+    return false if stack[i].freecell_value + 1 != stack[i - 1].freecell_value
+    return true
+  end
+
   def [](i)
     stack[i]
   end
@@ -47,6 +56,28 @@ class Tableau
     Tableau.new(stack.dup)
   end
 
-  attr_accessor :stack
+  def score
+
+    sum = 0
+    max = 10
+    ace_under = 0
+
+    (0...stack.length).each do |i|
+      val = stack[i].freecell_value
+
+      sum += 10 * (max + 1 - val) # every card on the board is worth some points
+      sum += 10 unless index_in_order?(i) # if not sorted with card above
+      sum += 10 * (10 - val) if i == 0 # bottom card in stack being not-a-ten
+
+      if ace_under > 0 # add points to this card if it's on top of an ace
+        sum += 10 * (max + 1 - ace_under)
+        ace_under += 1
+      end
+
+      ace_under = 1 if val == 1 # if this is an ace, other cards below are worse
+    end
+
+    sum
+  end
 
 end
