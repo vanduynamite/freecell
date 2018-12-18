@@ -11,6 +11,11 @@ class Freecell < Tableau
     Freecell.new(stack.dup)
   end
 
+  def compress
+    return nil if stack == []
+    stack
+  end
+
   def to_s
     # only for display purposes
     return "  " if empty?

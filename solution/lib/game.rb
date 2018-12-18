@@ -6,7 +6,7 @@ class Game
   attr_reader :display, :map, :player, :reverse_map
 
   def initialize(human_player = false, deck = Deck.new)
-    @tableaus = Array.new(1) { Tableau.new }
+    @tableaus = Array.new(8) { Tableau.new }
     @freecells = Array.new(4) { Freecell.new }
     @foundations = Card.suits.map { |suit| Foundation.new(suit) }
     @display = Display.new(self)
@@ -32,7 +32,7 @@ class Game
   def end_game
     render
     puts "\n\nYou won!!\n\n\n"
-    player.end_game
+    player.end_game(false)
     exit
   end
 

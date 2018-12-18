@@ -3,7 +3,7 @@ require_relative "requirements"
 class GameNode < Game
 
   attr_accessor :distance_from_root
-  attr_reader :all_nodes, :children
+  attr_reader :graph, :children, :compressed
 
   def initialize(parent, options)
     @parent = parent
@@ -14,52 +14,56 @@ class GameNode < Game
     @freecells = options[:freecells]
     @foundations = options[:foundations]
 
-    @all_nodes = options[:all_nodes]
+    @compressed = compress_node
+
+    @graph = options[:graph]
+    update_graph
   end
 
   def generate_children
-
-    get_possible_moves.each do |from_pile, to_pile|
+    possible_moves = get_possible_moves
+    possible_moves.each do |from_pile, to_pile|
       to_pile.add!(from_pile.pop)
-      compressed = compress_node
-      if all_nodes[compressed] == 0
-        add_new_game_state(from_pile, to_pile)
-      elsif all_nodes[compressed] > distance_from_root
-        # byebug
-        # all_nodes[compressed].distance_from_root = distance_from_root
-        # ideally something in here about shortening the path to victory
-      end
-      from_pile.add!(to_pile.pop)
+      add_new_node
+      from_pile.add!(to_pile.pop) # don't change the state of this node
     end
-
   end
 
-  def add_new_game_state(from_pile, to_pile)
-    self.all_nodes[compress_node] = 1
-
+  def add_new_node
     children << GameNode.new(self,
       tableaus: tableaus_dup,
       freecells: freecells_dup,
       foundations: foundations_dup,
-      all_nodes: all_nodes)
+      graph: graph)
+  end
 
+  def update_graph
+    if graph.include?(compressed)
+      if graph[compressed].distance_from_root > distance_from_root
+        graph[compressed] = self
+      end
+    else
+      graph[compressed] = self
+    end
   end
 
   def compress_node
     results = {
-      tableaus: Hash.new,
-      freecells: Hash.new,
-      foundations: Hash.new,
+      tableaus: Set.new,
+      freecells: Set.new,
+      foundations: Set.new,
     }
-    tableaus.each { |t| results[:tableaus][t.stack] = true }
-    freecells.each { |f| results[:freecells][f.stack] = true }
-    foundations.each { |f| results[:foundations][f.stack] = true }
-    # return results
+    tableaus.each do |t|
+      results[:tableaus].add(t.stack.hash)
+    end
+    freecells.each do |f|
+      results[:freecells].add(f.stack.hash)
+    end
+    foundations.each do |f|
+      results[:foundations].add(f.stack.hash)
+    end
+    # byebug
 
-    results = []
-    tableaus.each { |t| results += t.stack + [nil] }
-    freecells.each { |f| results += f.stack + [nil] }
-    foundations.each { |f| results += f.stack + [nil] }
     results
   end
 
@@ -90,7 +94,7 @@ class GameNode < Game
       pile.valid_add?(card)
       return true
     rescue => e
-      # puts e.message
+      # puts e.message # if you want to see all the possible moves that don't work
       return false
     end
   end
@@ -118,7 +122,9 @@ class GameNode < Game
       end
     end
 
-    results << [tableau, empty_freecell] if empty_freecell? && tableau.length > 1
+    results << [tableau, empty_freecell] if empty_freecell?
+    # this was in the 'if' above for some reason:
+    # && tableau.length > 1
 
     results
   end
