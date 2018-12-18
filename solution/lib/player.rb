@@ -2,11 +2,14 @@ require "byebug"
 
 class Player
 
-  attr_reader :game, :name
+  attr_accessor :nodes_visited
+  attr_reader :game, :name, :start_time
 
   def initialize(game, name = "Bill Gates")
     @game = game
     @name = name
+    @nodes_visited = 0
+    @start_time = Time.now()
   end
 
   def take_turn
@@ -19,6 +22,12 @@ class Player
       puts e.message
       retry
     end
+  end
+
+  def end_game
+    end_time = Time.now()
+    puts "Took #{end_time - start_time} seconds"
+    puts "Visited #{nodes_visited} nodes"
   end
 
   private
@@ -51,5 +60,6 @@ class Player
 
     input
   end
+
 
 end

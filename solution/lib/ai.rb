@@ -2,7 +2,7 @@ require_relative "requirements"
 
 class AIPlayer < Player
 
-  attr_reader :start_node
+  attr_reader :start_node, :nodes_to_visit
 
   def initialize(game)
     super(game, "Hal")
@@ -11,18 +11,25 @@ class AIPlayer < Player
       tableaus: game.tableaus,
       freecells: game.freecells,
       foundations: game.foundations,
-      prev_game_states: Hash.new(false))
+      all_nodes: Hash.new(0))
 
-    @nodes = [start_node]
+    @nodes_to_visit = [start_node]
   end
 
   def take_turn
-    generate_node_graph
+    if nodes_to_visit.empty?
+      game.impossible(start_node)
+    end
+    # node = nodes_to_visit.pop # depth first
+    node = nodes_to_visit.shift # breadth first
+    self.nodes_visited = nodes_visited + 1
+    game.tableaus = node.tableaus
+    game.freecells = node.freecells
+    game.foundations = node.foundations
+    node.generate_children
+    nodes_to_visit.concat(node.children)
   end
 
-  def generate_node_graph
-    start_node.generate_children
-  end
 
   private
 

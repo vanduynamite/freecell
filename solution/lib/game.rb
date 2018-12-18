@@ -2,10 +2,11 @@ require_relative "requirements"
 
 class Game
 
-  attr_reader :display, :freecells, :foundations, :tableaus, :map, :player, :reverse_map
+  attr_accessor :freecells, :foundations, :tableaus
+  attr_reader :display, :map, :player, :reverse_map
 
   def initialize(human_player = false, deck = Deck.new)
-    @tableaus = Array.new(8) { Tableau.new }
+    @tableaus = Array.new(1) { Tableau.new }
     @freecells = Array.new(4) { Freecell.new }
     @foundations = Card.suits.map { |suit| Foundation.new(suit) }
     @display = Display.new(self)
@@ -31,7 +32,7 @@ class Game
   def end_game
     render
     puts "\n\nYou won!!\n\n\n"
-    # execute the shortest set of steps if AI
+    player.end_game
     exit
   end
 
@@ -41,6 +42,15 @@ class Game
 
   def tableau_lengths
     tableaus.map { |tab| tab.length }
+  end
+
+  def impossible(game_node)
+    self.tableaus = game_node.tableaus
+    self.freecells = game_node.freecells
+    self.foundations = game_node.foundations
+    render
+    puts "Turns out this game is impossible to solve!"
+    # break
   end
 
   private

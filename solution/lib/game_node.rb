@@ -1,52 +1,60 @@
 require_relative "requirements"
 
 class GameNode < Game
-  attr_reader :freecells, :foundations, :tableaus, :children, :display
-  attr_reader :prev_game_states, :reverse_map
+
+  attr_accessor :distance_from_root
+  attr_reader :all_nodes, :children
 
   def initialize(parent, options)
     @parent = parent
+    @distance_from_root = parent ? parent.distance_from_root + 1 : 0
     @children = []
 
     @tableaus = options[:tableaus]
     @freecells = options[:freecells]
     @foundations = options[:foundations]
 
-    @display = Display.new(self)
-    @reverse_map = build_reverse_map
-    @prev_game_states = options[:prev_game_states]
+    @all_nodes = options[:all_nodes]
   end
 
   def generate_children
-    render
 
     get_possible_moves.each do |from_pile, to_pile|
       to_pile.add!(from_pile.pop)
-      end_game if won?
-      add_new_game_state(from_pile, to_pile) unless prev_game_states[compress]
+      compressed = compress_node
+      if all_nodes[compressed] == 0
+        add_new_game_state(from_pile, to_pile)
+      elsif all_nodes[compressed] > distance_from_root
+        byebug
+        all_nodes[compressed].distance_from_root = distance_from_root
+      end
       from_pile.add!(to_pile.pop)
     end
-
-    # children.last.generate_children # breadth first solve
 
   end
 
   def add_new_game_state(from_pile, to_pile)
-    new_from_key = reverse_map[from_pile].chr
-    new_to_key = reverse_map[to_pile].chr
-    puts "Possible move from #{new_from_key} to #{new_to_key}"
-    self.prev_game_states[compress] = true
+    self.all_nodes[compress_node] = 1
 
     children << GameNode.new(self,
       tableaus: tableaus_dup,
       freecells: freecells_dup,
       foundations: foundations_dup,
-      prev_game_states: prev_game_states)
+      all_nodes: all_nodes)
 
-    children.last.generate_children # depth first solve
   end
 
-  def compress
+  def compress_node
+    # results = {
+    #   tableaus: Hash.new,
+    #   freecells: Hash.new,
+    #   foundations: Hash.new,
+    # }
+    # tableaus.each { |t| results[:tableaus][t.stack] = true }
+    # freecells.each { |f| results[:freecells][f.stack] = true }
+    # foundations.each { |f| results[:foundations][f.stack] = true }
+    # return results
+
     results = []
     tableaus.each { |t| results += t.stack + [nil] }
     freecells.each { |f| results += f.stack + [nil] }
@@ -69,9 +77,9 @@ class GameNode < Game
   def get_possible_moves
     results = []
 
-    foundations.each { |foundation| results += possible_moves_to_foundation(foundation) }
-    tableaus.each { |tableau| results += possible_moves_from_tableau(tableau) }
     freecells.each { |freecell| results += possible_moves_from_freecell(freecell) }
+    tableaus.each { |tableau| results += possible_moves_from_tableau(tableau) }
+    foundations.each { |foundation| results += possible_moves_to_foundation(foundation) }
 
     results
   end
@@ -134,25 +142,25 @@ class GameNode < Game
     freecells.select { |freecell| freecell.empty? }.first
   end
 
-  def build_reverse_map
-    {
-      tableaus[0] => 48,
-      tableaus[1] => 49,
-      tableaus[2] => 50,
-      tableaus[3] => 51,
-      tableaus[4] => 52,
-      tableaus[5] => 53,
-      tableaus[6] => 54,
-      tableaus[7] => 55,
-      freecells[0] => 97,
-      freecells[1] => 98,
-      freecells[2] => 99,
-      freecells[3] => 100,
-      foundations[0] => 119,
-      foundations[1] => 120,
-      foundations[2] => 121,
-      foundations[3] => 122,
-    }
-  end
+  # def build_reverse_map
+  #   {
+  #     tableaus[0] => 48,
+  #     tableaus[1] => 49,
+  #     tableaus[2] => 50,
+  #     tableaus[3] => 51,
+  #     tableaus[4] => 52,
+  #     tableaus[5] => 53,
+  #     tableaus[6] => 54,
+  #     tableaus[7] => 55,
+  #     freecells[0] => 97,
+  #     freecells[1] => 98,
+  #     freecells[2] => 99,
+  #     freecells[3] => 100,
+  #     foundations[0] => 119,
+  #     foundations[1] => 120,
+  #     foundations[2] => 121,
+  #     foundations[3] => 122,
+  #   }
+  # end
 
 end
