@@ -27,8 +27,8 @@ class Card
     :nine  => "9",
     :ten   => "T",
     :jack  => "J",
-    # :queen => "Q",
-    # :king  => "K",
+    :queen => "Q",
+    :king  => "K",
   }
 
   FREECELL_VALUE = {

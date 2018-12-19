@@ -62,8 +62,8 @@ class Tableau
     max = 13
     buried_value = 0
 
-    (0...stack.length).each do |i|
-      val = stack[i].freecell_value
+    (0...@stack.length).each do |i|
+      val = @stack[i].freecell_value
 
       sum += 10 * (max + 1 - val) # every card on the board is worth some points
       sum += 10 unless index_in_order?(i) # if not sorted with card above

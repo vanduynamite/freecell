@@ -25,7 +25,7 @@ class Game
   def play
     render
     until won?
-      # render
+      render
       player.take_turn
     end
 
@@ -87,7 +87,7 @@ if __FILE__ == $0
 
   avg_nodes = 0
   results = []
-  iterations = 2
+  iterations = 1
 
   (0...iterations).each do |_|
     g = Game.new(false)

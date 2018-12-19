@@ -1,5 +1,6 @@
-require 'card'
-require 'game'
+require 'requirements'
+# require 'card'
+# require 'game'
 
 describe Game do
 
@@ -14,7 +15,7 @@ describe Game do
     Card.new(:clubs, :ace),
   ]
 
-  subject(:game) { Game.new(deck_cards) }
+  subject(:game) { Game.new(true, deck_cards) }
 
   describe "#initialize" do
 
@@ -40,7 +41,7 @@ describe Game do
 
   describe "#won?" do
 
-    game = Game.new(deck_cards)
+    game = Game.new(true, deck_cards)
 
     it "returns false if there are still cards in the tableaus" do
       expect(game.won?).to be false

@@ -11,10 +11,6 @@ describe Tableau do
   let(:card_red_3) { Card.new(:diamonds, :three) }
   let(:card_black_3) { Card.new(:spades, :three) }
 
-  it "does not allow access to the stack" do
-    expect(tableau).not_to respond_to(:stack)
-  end
-
   describe "#add!" do
     before(:each) { tableau.add!(card_black_1) }
 
