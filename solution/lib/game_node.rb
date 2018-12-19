@@ -88,7 +88,6 @@ class GameNode < Game
       pile.valid_add?(card)
       return true
     rescue => e
-      # puts e.message # if you want to see all the possible moves that don't work
       return false
     end
   end
@@ -97,9 +96,7 @@ class GameNode < Game
     results = []
     piles = freecells + tableaus
     piles.each do |pile|
-      unless pile.empty?
-        results << [pile, foundation] if possible_move?(foundation, pile.peek)
-      end
+      results << [pile, foundation] if !pile.empty? && possible_move?(foundation, pile.peek)
     end
 
     results
@@ -111,8 +108,8 @@ class GameNode < Game
     top = tableau.peek
 
     tableaus.each do |tableau2|
-      if (!tableau2.empty? || tableau.length > 1)
-        results << [tableau, tableau2] if possible_move?(tableau2, top)
+      if (!tableau2.empty? || tableau.length > 1) && possible_move?(tableau2, top)
+        results << [tableau, tableau2]
       end
     end
 

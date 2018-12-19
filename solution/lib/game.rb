@@ -35,8 +35,7 @@ class Game
   def end_game
     render
     puts "\n\nYou won!!\n\n\n"
-    player.end_game
-    exit
+    return player.end_game
   end
 
   def render
@@ -85,9 +84,23 @@ class Game
 end
 
 if __FILE__ == $0
-  g = Game.new(false)
-  g.play
 
-  g = Game.new(false)
-  
+  avg_nodes = 0
+  results = []
+  iterations = 2
+
+  (0...iterations).each do |_|
+    g = Game.new(false)
+    results << g.play
+    avg_nodes += results[-1][1]
+  end
+
+  puts "Average of #{avg_nodes / iterations} nodes visited across #{iterations} iterations\n\n"
+  results.each_with_index do |r, i|
+    puts "Iteration #{i}:"
+    puts "   Nodes Found:       #{r[0]}"
+    puts "   Nodes Visited:     #{r[1]}"
+    puts "   Depth of Solution: #{r[2]}"
+    puts
+  end
 end

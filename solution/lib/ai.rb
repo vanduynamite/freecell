@@ -24,7 +24,7 @@ class AIPlayer < Player
       game.impossible(start_node)
     end
 
-    node = get_next_node
+    node = nodes_to_visit.pop
     nodes_visited.add(node.compressed)
     node.generate_children
     self.nodes_to_visit = update_traverse_tree(node)
@@ -35,21 +35,27 @@ class AIPlayer < Player
     game.foundations = node.foundations
   end
 
+
+  def end_game
+    # puts "Took #{Time.now() - start_time} seconds"
+    # puts "Found #{start_node.graph.count} nodes"
+    # puts "Visited #{nodes_visited.count} nodes"
+    # puts "Last node visited distance: #{last_node_visited.distance_from_root}"
+
+    return [start_node.graph.count, nodes_visited.count, last_node_visited.distance_from_root]
+  end
+
+  private
+
   def update_traverse_tree(node)
     nodes_to_add = custom_sort(node.children)
     result = nodes_to_visit + nodes_to_add
-    # return result
-    result.sort_by { |h| h.score }.reverse
-  end
-
-  def get_next_node
-    nodes_to_visit.pop
+    return result
   end
 
   def custom_sort(nodes)
     result = remove_visited_nodes(nodes)
-    # TODO: better sort bro
-    result = result.sort_by { |h| h.score }.reverse
+    result = reverse_qsort(result)
     result
   end
 
@@ -57,26 +63,12 @@ class AIPlayer < Player
     nodes.reject { |node| nodes_visited.include?(node.compressed) }
   end
 
-  def end_game
-    puts "Took #{Time.now() - start_time} seconds"
-    puts "Found #{start_node.graph.count} nodes"
-    puts "Visited #{nodes_visited.count} nodes"
-    puts "Last node visited distance: #{last_node_visited.distance_from_root}"
-    puts "Average nodes per second: #{nodes_visited.count / (Time.now() - start_time)}"
-  end
-
-
-  private
-
-  ACCEPTABLE_FROM = ("0".."7").to_a + ("a".."d").to_a
-  ACCEPTABLE_TO = ACCEPTABLE_FROM + ("w".."z").to_a
-
-  def get_from_pile
-    sleep(1)
-  end
-
-  def get_to_pile
-    sleep(1)
+  def reverse_qsort(nodes)
+    return nodes if nodes.length <= 1
+    pivot = nodes[0]
+    left = reverse_qsort(nodes.select { |node| node.score > pivot.score })
+    right = reverse_qsort(nodes[1..-1].select { |node| node.score <= pivot.score })
+    left + [pivot] + right
   end
 
 end
