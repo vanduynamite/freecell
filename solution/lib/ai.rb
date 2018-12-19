@@ -37,7 +37,9 @@ class AIPlayer < Player
 
   def update_traverse_tree(node)
     nodes_to_add = custom_sort(node.children)
-    return nodes_to_visit + nodes_to_add
+    result = nodes_to_visit + nodes_to_add
+    # return result
+    result.sort_by { |h| h.score }.reverse
   end
 
   def get_next_node
@@ -46,6 +48,7 @@ class AIPlayer < Player
 
   def custom_sort(nodes)
     result = remove_visited_nodes(nodes)
+    # TODO: better sort bro
     result = result.sort_by { |h| h.score }.reverse
     result
   end
@@ -54,29 +57,12 @@ class AIPlayer < Player
     nodes.reject { |node| nodes_visited.include?(node.compressed) }
   end
 
-  def end_game(print_nodes = false)
+  def end_game
     puts "Took #{Time.now() - start_time} seconds"
     puts "Found #{start_node.graph.count} nodes"
     puts "Visited #{nodes_visited.count} nodes"
     puts "Last node visited distance: #{last_node_visited.distance_from_root}"
     puts "Average nodes per second: #{nodes_visited.count / (Time.now() - start_time)}"
-
-    return unless print_nodes
-
-    start_node.graph.each do |key, node|
-      puts key
-      print "\nFreecells: "
-      node.freecells.each { |t| print "#{t} " }
-      print "\nFoundations: "
-      node.foundations.each { |t| print "#{t} " }
-      puts "\nTableaus:"
-      node.tableaus.each do |t|
-        t.stack.each { |card| print "#{card} "}
-        puts
-      end
-    end
-
-
   end
 
 

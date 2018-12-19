@@ -25,8 +25,7 @@ class Game
   def play
     render
     until won?
-      # byebug
-      render
+      # render
       player.take_turn
     end
 
@@ -36,7 +35,7 @@ class Game
   def end_game
     render
     puts "\n\nYou won!!\n\n\n"
-    player.end_game(false)
+    player.end_game
     exit
   end
 
@@ -54,7 +53,6 @@ class Game
     self.foundations = game_node.foundations
     render
     puts "Turns out this game is impossible to solve!"
-    # break
   end
 
   private
@@ -89,4 +87,7 @@ end
 if __FILE__ == $0
   g = Game.new(false)
   g.play
+
+  g = Game.new(false)
+  
 end

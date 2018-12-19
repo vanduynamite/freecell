@@ -25,7 +25,7 @@ class Player
     end
   end
 
-  def end_game(print_nodes)
+  def end_game
     end_time = Time.now()
     puts "Took #{end_time - start_time} seconds"
     puts "Visited #{nodes_visited} nodes"

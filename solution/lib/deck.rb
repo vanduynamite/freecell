@@ -13,8 +13,9 @@ class Deck
   end
 
   def initialize(cards = Deck.all_cards)
-    # @cards = cards.shuffle
-    @cards = cards.reverse
+    # @cards = cards.shuffle(random: Random.new(31415926))
+    @cards = cards.shuffle
+    # @cards = cards.reverse
   end
 
   def count

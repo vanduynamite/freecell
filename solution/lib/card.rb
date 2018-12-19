@@ -26,8 +26,8 @@ class Card
     :eight => "8",
     :nine  => "9",
     :ten   => "T",
-    # :jack  => "J",
-    # :queen => "Q",
+    :jack  => "J",
+    :queen => "Q",
     # :king  => "K",
   }
 

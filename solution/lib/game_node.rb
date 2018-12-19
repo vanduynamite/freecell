@@ -40,6 +40,7 @@ class GameNode < Game
 
   def update_graph
     if graph.include?(compressed)
+      # some more special stuff here??? Update parents to have this child?
       if graph[compressed].distance_from_root > distance_from_root
         graph[compressed] = self
       end
@@ -54,16 +55,10 @@ class GameNode < Game
       freecells: Set.new,
       foundations: Set.new,
     }
-    tableaus.each do |t|
-      results[:tableaus].add(t.stack.hash)
-    end
-    freecells.each do |f|
-      results[:freecells].add(f.stack.hash)
-    end
-    foundations.each do |f|
-      results[:foundations].add(f.stack.hash)
-    end
-    # byebug
+
+    tableaus.each { |t| results[:tableaus].add(t.stack.hash) }
+    freecells.each { |f| results[:freecells].add(f.stack.hash) }
+    foundations.each { |f| results[:foundations].add(f.stack.hash) }
 
     results
   end
@@ -82,11 +77,9 @@ class GameNode < Game
 
   def get_possible_moves
     results = []
-
     freecells.each { |freecell| results += possible_moves_from_freecell(freecell) }
     tableaus.each { |tableau| results += possible_moves_from_tableau(tableau) }
     foundations.each { |foundation| results += possible_moves_to_foundation(foundation) }
-
     results
   end
 
@@ -124,8 +117,6 @@ class GameNode < Game
     end
 
     results << [tableau, empty_freecell] if empty_freecell?
-    # this was in the 'if' above for some reason:
-    # && tableau.length > 1
 
     results
   end
@@ -152,33 +143,10 @@ class GameNode < Game
 
   def score_node
     score = 0
-
     # foundations.each { |f| score += 0 } # anything on a foundation costs 0
     freecells.each { |f| score += f.score }
     tableaus.each { |t| score += t.score }
-    # puts score
     score
   end
-
-  # def build_reverse_map
-  #   {
-  #     tableaus[0] => 48,
-  #     tableaus[1] => 49,
-  #     tableaus[2] => 50,
-  #     tableaus[3] => 51,
-  #     tableaus[4] => 52,
-  #     tableaus[5] => 53,
-  #     tableaus[6] => 54,
-  #     tableaus[7] => 55,
-  #     freecells[0] => 97,
-  #     freecells[1] => 98,
-  #     freecells[2] => 99,
-  #     freecells[3] => 100,
-  #     foundations[0] => 119,
-  #     foundations[1] => 120,
-  #     foundations[2] => 121,
-  #     foundations[3] => 122,
-  #   }
-  # end
 
 end

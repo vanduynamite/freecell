@@ -59,8 +59,8 @@ class Tableau
   def score
 
     sum = 0
-    max = 10
-    ace_under = 0
+    max = 13
+    buried_value = 0
 
     (0...stack.length).each do |i|
       val = stack[i].freecell_value
@@ -69,12 +69,14 @@ class Tableau
       sum += 10 unless index_in_order?(i) # if not sorted with card above
       sum += 10 * (10 - val) if i == 0 # bottom card in stack being not-a-ten
 
-      if ace_under > 0 # add points to this card if it's on top of an ace
-        sum += 10 * (max + 1 - ace_under)
-        ace_under += 1
+      if buried_value > 0 # add points to this card if it's on top of an ace
+        sum += 10 * buried_value
+        buried_value -= 1
       end
 
-      ace_under = 1 if val == 1 # if this is an ace, other cards below are worse
+      # if this is an ace, other cards below are worse
+      buried_value += max + 1 - val unless index_in_order?(i)
+
     end
 
     sum

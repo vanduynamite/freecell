@@ -24,7 +24,7 @@ class Freecell < Tableau
 
   def score
     return 0 if empty?
-    max = 10
+    max = 13
     10 * (max + 1 - stack[0].freecell_value)
   end
 
