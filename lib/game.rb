@@ -24,6 +24,7 @@ class Game
 
   def play
     render
+    sleep(1)
     until won?
       render
       player.take_turn
@@ -97,7 +98,7 @@ if __FILE__ == $0
 
   puts "Average of #{avg_nodes / iterations} nodes visited across #{iterations} iterations\n\n"
   results.each_with_index do |r, i|
-    puts "Iteration #{i}:"
+    puts "Iteration #{i + 1}:"
     puts "   Nodes Found:       #{r[0]}"
     puts "   Nodes Visited:     #{r[1]}"
     puts "   Depth of Solution: #{r[2]}"
