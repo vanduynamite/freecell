@@ -1,3 +1,12 @@
+### Instructions
+* Clone this repository and run `bundle install` in the root directory
+* Run specs with `bundle exec rspec`
+* Run the AI solver on a random game with `ruby lib/game.rb`
+  * Open `lib/deck.rb` and uncomment line 17 to use a seed of a decent game
+  * Open `lib/game.rb` and comment out line 30 to turn off the display and let the game run as quick as possible
+* Open `lib/game.rb` and change `human_player = false` on line 8 to `human_player = true` to let the game run with a human player
+
+
 # Freecell with Tests and Node Graph Solver
 
 This program was originally created during the App Academy curriculum as a study guide for myself and my fellow students for one of our tests. It is a [test driven, object oriented](#test-driven-oop) Freecell game playable in the browser, and originally included a TDD 'blank slate' version to be filled out by the test taker.
