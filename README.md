@@ -2,7 +2,7 @@
 
 This program was originally created during the App Academy curriculum as a study guide for myself and my fellow students for one of our tests. It is a [test driven, object oriented](#test-driven-oop) Freecell game playable in the browser, and originally included a TDD 'blank slate' version to be filled out by the test taker.
 
-After the class I created a [node tree solver](#node-graph-solver) to find a solution to any game of Freecell with a very basic algorithm to find and choose nodes. I later improved the solver to be a [node graph](#why-a-node-graph?) which would consider nodes and update them if it found duplicates, creating a true graph. I also created a light-weight [custom data structure](#gamenode#compress_node) to store game states, ensuring no game was tried twice. Lastly, I tuned the algorithm to choose [which node to explore next](#stack#score) using some relatively simple rules score each potential game. 
+After the class I created a [node tree solver](#node-graph-solver) to find a solution to any game of Freecell with a very basic algorithm to find and choose nodes. I later improved the solver to be a [node graph](#why-a-node-graph) which would consider nodes and update them if it found duplicates, creating a true graph. I also created a light-weight [custom data structure](#node-compression) to store game states, ensuring no game was tried twice. Lastly, I tuned the algorithm to choose [which node to explore next](#scoring-a-node) using some relatively simple rules score each potential game.
 
 ## Test Driven OOP
 The file structure is clear and easy to understand, with separate files for the cards, deck, game, player, and each type of pile. The piles within Freecell (called the Tableaus, Freecells, and Foundation piles) are extremely similar and therefore use inheritance to keep the appropriate methods DRY.
@@ -35,9 +35,9 @@ end
 The AI player is initialized with a starting node and contains two important variables, a `@nodes_to_visit` array and a `@nodes_visited` Set.
 Each time the AI is asked to take a turn it will:
 * Pop the last value in `@nodes_to_visit`
-* Store the [compressed version](#gamenode#compress_node) of the node in `@nodes_visited`
-* Calls the [generate_children](#gamenode#generate_children) method on that node
-* Update the [traverse tree](#ai#update_traverse_tree) with the new children
+* Store the [compressed version](#node-compression) of the node in `@nodes_visited`
+* Calls the [generate_children](#node-generation) method on that node
+* Update the [traverse tree](#update_traverse_tree) with the new children
 
 ```ruby
 # ai.rb
@@ -52,7 +52,7 @@ def take_turn
 end
 ```
 
-### GameNode#compress_node
+### Node Compression
 Early on I identified that the game would happily repeat the same move back and forth forever without getting anywhere. To prevent this, I created an interesting way to compress each node and store it in the `@nodes_visited`. The `GameNode#compress_node` method creates a Hashmap of Sets, where each Set contains the `Object#hash`ed value for each stack of cards.
 
 ```ruby
@@ -118,7 +118,7 @@ compressed_node = {
 
 ```
 
-### GameNode#generate_children
+### Node Generation
 When a Node generates children, it simply runs through any possible move of one card from one stack to a different stack and checks to see if that move is valid according to the rules of the game.
 
 ```ruby
@@ -133,13 +133,13 @@ end
 
 Each possible move is stored as an array of `[from_pile, to_pile]` and Because each type of stack has a `#pop` and an `#add` method, the whole list of possible moves can be DRYly checked against the rules in one loop.
 
-### AI#update_traverse_tree
+### Update Traverse Tree
 When a child node is initialized, its game state is scored. And when each node is done generating children, those children are sorted by their score added to the AI's `@nodes_to_visit` variable. When the AI takes its next turn, the best (lowest) scored game state of the last batch of children will be attempted.
 
 Another option was to sort the entire array of possible nodes including the new children, but there was no noticeable time saved, and the continuity is nice if you actually want to slow it down and watch the solution.
 
-### Stack#score
-The real magic of this is the scoring algorithm, which is very simple at its core. Each stack type has a `#score` method, but only the Tableau's is interesting.
+### Scoring a Node
+The real magic of this is the scoring algorithm, which is very simple at its core. A node has a cost which is found by getting the cost of each stack in the game state. Each stack type has a `#score` method, but only the Tableau's is interesting (Foundations cost zero and Freecells cost an amount inverse to the card value).
 
 Finding the cost of each Tableau considers some conditions for each card in the stack:
 * If the card exists on the board at all it has a cost inverse with its value (as opposed to on a Foundation where every card costs zero)
@@ -187,7 +187,7 @@ end
 
 The fun part about this solution is that improvements can be isolated to fine-tuning this single method. I'm sure there has been entire research papers done on the best way to score a Freecell game, but for now this homegrown solution works fairly well.
 
-### Why a Node Graph?
+### Why a Node Graph
 What makes this solver a node graph rather than a tree is that each child node is also stored in the `@graph` instance variable which contains a Hashmap of all GameNodes and which all GameNodes point to. To conserve memory, this variable exists in a single place in memory and is not duplicated for each new GameNode.
 
 The reason I chose to implement a graph was to check the quickest discovered distance from the root node. If a child is created that already exists in `@graph`, its `@distance_from_root` variable is updated to the lowest available value. In this way, when the AI is done solving the game, it may have checked 1000 nodes, but found that the quickest way to a solution is only 200 nodes deep.
