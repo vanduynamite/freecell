@@ -37,7 +37,7 @@ Each time the AI is asked to take a turn it will:
 * Pop the last value in `@nodes_to_visit`
 * Store the [compressed version](#node-compression) of the node in `@nodes_visited`
 * Calls the [generate_children](#node-generation) method on that node
-* Update the [traverse tree](#update-traverse-tree) with the new children
+* Update the [traverse tree](#update-traverse-tree) with the new children according to their [score](#scoring-a-node)
 
 ```ruby
 # ai.rb
