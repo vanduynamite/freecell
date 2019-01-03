@@ -14,7 +14,7 @@ class Deck
 
   def initialize(cards = Deck.all_cards)
     @cards = cards.shuffle
-    # @cards = cards.shuffle(random: Random.new(31))
+    # @cards = cards.shuffle(random: Random.new(31)) # this seed is a relatively quick solve
   end
 
   def count

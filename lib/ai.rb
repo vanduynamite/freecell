@@ -37,12 +37,7 @@ class AIPlayer < Player
 
 
   def end_game
-    # puts "Took #{Time.now() - start_time} seconds"
-    # puts "Found #{start_node.graph.count} nodes"
-    # puts "Visited #{nodes_visited.count} nodes"
-    # puts "Last node visited distance: #{last_node_visited.distance_from_root}"
-
-    return [start_node.graph.count, nodes_visited.count, last_node_visited.distance_from_root]
+    [start_node.graph.count, nodes_visited.count, last_node_visited.distance_from_root]
   end
 
   private

@@ -40,7 +40,6 @@ class GameNode < Game
 
   def update_graph
     if graph.include?(compressed)
-      # some more special stuff here??? Update parents to have this child?
       if graph[compressed].distance_from_root > distance_from_root
         graph[compressed] = self
       end

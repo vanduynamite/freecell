@@ -25,8 +25,9 @@ class Game
   def play
     render
     sleep(1)
+
     until won?
-      render
+      render # comment this out for a faster solve and no display
       player.take_turn
     end
 
@@ -85,7 +86,6 @@ class Game
 end
 
 if __FILE__ == $0
-
   avg_nodes = 0
   results = []
   iterations = 1

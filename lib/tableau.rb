@@ -67,14 +67,14 @@ class Tableau
 
       sum += 10 * (max + 1 - val) # every card on the board is worth some points
       sum += 10 unless index_in_order?(i) # if not sorted with card above
-      sum += 10 * (10 - val) if i == 0 # bottom card in stack being not-a-ten
+      sum += 10 * (max - val) if i == 0 # bottom card in stack being too low
 
-      if buried_value > 0 # add points to this card if it's on top of an ace
+      if buried_value > 0 # add points to this card if it's on top of other lower cards
         sum += 10 * buried_value
         buried_value -= 1
       end
 
-      # if this is an ace, other cards below are worse
+      # if this is an ace or low card, make other cards below cost more
       buried_value += max + 1 - val unless index_in_order?(i)
 
     end

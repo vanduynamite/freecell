@@ -8,7 +8,6 @@ class Display
 
   def render
     sleep(0.03)
-    # sleep(3)
     system("clear")
     render_top
     render_tableaus
